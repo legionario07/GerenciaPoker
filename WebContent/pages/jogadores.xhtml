@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/layout.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmJogadores">
+			<p:dataTable id="dtJogadores" value="#{MBJogador.jogadores}" widgetVar="tabelaListagem" var="jogador"
+				style="width:60%; align:center" sortBy="#{jogador.id}"
+				emptyMessage="Nenhum Registro foi encontrado" paginator="true"
+				rows="10">
+
+				<f:facet name="header">
+					<h:outputText value="Jogadores" style="font-size:14px" />
+				</f:facet>
+
+
+				<p:column headerText="Id" width="5%"
+					style="font-size:11px; text-align:center" sortBy="#{jogador.id}">
+					<h:outputText value="#{jogador.id}" />
+				</p:column>
+
+				<p:column headerText="Nome" width="15%" style="font-size:11px"
+					sortBy="#{jogador.nome}">
+					<h:outputText value="#{jogador.nome}" />
+				</p:column>
+
+				<p:column headerText="Opções" width="10%" style="text-align:center">
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						onclick="PF('dlgEditarJogador').show();"
+						update=":frmEditarJogador:pnlEditarJogador">
+						<f:setPropertyActionListener value="#{jogador}"
+							target="#{MBJogador.jogador}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						onclick="PF('dlgExcluirJogador').show();"
+						update="frmExcluirJogador ">
+						<f:setPropertyActionListener value="#{jogador}"
+							target="#{MBJogador.jogador}" />
+					</p:commandButton>
+
+				</p:column>
+				<f:facet name="footer">
+					<h:panelGrid>
+						<p:commandButton value="Novo" onclick="PF('dlgJogadorCadastrar').show();"
+							update=":frmNovaJogador" />
+					</h:panelGrid>
+				</f:facet>
+
+			</p:dataTable>
+		</h:form>
+
+		<!--  Caixa de Dialogo Cadastrar Jogador -->
+		<p:dialog widgetVar="dlgJogadorCadastrar" closable="false" width="30%"
+			id="dlgNova" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Jogadores - Cadastrar">
+			<h:form id="frmNovaJogador">
+
+				<h:panelGrid id="pnlNovaJogador">
+
+					<h:outputText value="Nome: *" />
+					<p:inputText value="#{MBJogador.jogador.nome}"
+						rendered="true" requiredMessage="Favor informar o nome" />
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="CADASTRAR"
+						actionListener="#{MBJogador.save}"
+						update="frmJogadores:dtJogadores"
+						onclick="PF('dlgJogadorCadastrar').hide();">
+						<f:param name="param" value="CADASTRAR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBJogador.clear}"
+						onclick="PF('dlgJogadorCadastrar').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+		
+			<p:dialog widgetVar="dlgEditarJogador" closable="false" width="30%"
+			id="dlgEditar" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Jogadores - Editar">
+			<h:form id="frmEditarJogador">
+
+				<h:panelGrid id="pnlEditarJogador">
+
+					<h:outputText value="Nome: *" />
+					<p:inputText value="#{MBJogador.jogador.nome}"
+						rendered="true" requiredMessage="Favor informar o nome" />
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="EDITAR"
+						actionListener="#{MBJogador.edite}"
+						update="frmJogadores:dtJogadores"
+						onclick="PF('dlgEditarJogador').hide();">
+						<f:param name="param" value="EDITAR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBJogador.clear}"
+						onclick="PF('dlgEditarJogador').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+		
+			<p:dialog widgetVar="dlgExcluirJogador" closable="false" width="30%"
+			id="dlgExcluir" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Jogadores - Excluir">
+			<h:form id="frmExcluirJogador">
+
+				<h:panelGrid id="pnlExcluirJogador">
+
+					<h:outputText value="Nome: " />
+					<p:inputText value="#{MBJogador.jogador.nome}" readonly="true"/>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="EXCLUIR"
+						actionListener="#{MBJogador.delete}"
+						update="frmJogadores:dtJogadores"
+						onclick="PF('dlgExcluirJogador').hide();">
+						<f:param name="param" value="EXCLUIR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBJogador.clear}"
+						onclick="PF('dlgExcluirJogador').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+
+</ui:composition>

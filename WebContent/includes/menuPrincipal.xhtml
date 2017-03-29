@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<h:form id="formMenuPrincipal">
+		<p:menubar>
+			<p:submenu label="Partida" id="menuPartida" icon="ui-icon-play">
+				<p:menuitem value="Incluir" id="subIncluir" outcome="partida.xhtml">
+				</p:menuitem>
+				<p:menuitem value="Editar" id="subEditar">
+				</p:menuitem>
+				<p:menuitem value="Excluir" id="subExcluir">
+				</p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="Estátisticas" icon="ui-icon-signal" id="menuEstatisticas">
+				<p:menuitem value="Verificar">
+				</p:menuitem>
+			</p:submenu>
+			
+			<p:submenu icon="ui-icon-gear">
+				<p:menuitem value="Colocação" outcome="pontos.xhtml"/>
+				<p:menuitem value="Jogador" outcome="jogadores.xhtml"/>
+				<p:menuitem value="Local" outcome="locais.xhtml"/>
+			</p:submenu>
+
+		</p:menubar>
+	</h:form>
+
+</ui:composition>

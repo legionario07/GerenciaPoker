@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/layout.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmPartidas">
+			<p:dataTable id="dtPartidas" value="#{MBPartida.partidas}"
+				widgetVar="tabelaListagem" var="partida"
+				style="width:80%; align:center" sortBy="#{partida.id}"
+				emptyMessage="Nenhum Registro foi encontrado" paginator="true"
+				rows="10">
+
+				<f:facet name="header">
+					<h:outputText value="Partidas" style="font-size:14px" />
+				</f:facet>
+
+
+				<p:column headerText="Id" width="5%"
+					style="font-size:11px; text-align:center" sortBy="#{partida.id}">
+					<h:outputText value="#{partida.id}" />
+				</p:column>
+
+				<p:column headerText="Data" width="15%" style="font-size:11px"
+					sortBy="#{partida.data}">
+					<h:outputText value="#{partida.data}" />
+				</p:column>
+
+				<p:column headerText="Local" width="15%" style="font-size:11px"
+					sortBy="#{partida.local}">
+					<h:outputText value="#{partida.local.local}" />
+				</p:column>
+
+				<p:column headerText="Prem. Ranking" width="10%"
+					style="font-size:11px" sortBy="#{partida.premiacaoRanking}">
+					<h:outputText value="#{partida.premiacaoRanking}" />
+				</p:column>
+
+				<p:column headerText="Participantes" width="15%"
+					style="font-size:11px" sortBy="#{partida.participacao}">
+					<h:outputText value="#{partida.participacao}" />
+				</p:column>
+
+				<p:column headerText="Opções" width="10%" style="text-align:center">
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						onclick="PF('dlgPartidaCadastrar').show();"
+						update=":frmNovaPartida:pnlNovaPartida :msgGlobal">
+						<f:setPropertyActionListener value="#{partida}"
+							target="#{MBPartida.partida}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						onclick="PF('dlgExcluirPartida').show();"
+						update=":frmExcluirPartida:pnlExcluirPartida :msgGlobal">
+						<f:setPropertyActionListener value="#{partida}"
+							target="#{MBPartida.partida}" />
+					</p:commandButton>
+
+				</p:column>
+				<f:facet name="footer">
+					<h:panelGrid>
+						<p:commandButton value="Novo"
+							onclick="PF('dlgPartidaCadastrar').show();"
+							update=":frmNovaPartida :msgGlobal" />
+					</h:panelGrid>
+					<p:outputLabel value="Exitem " />
+					<p:outputLabel value="#{MBPartida.totalPartidas}" />
+					<p:outputLabel value=" partidas cadastradas." />
+				</f:facet>
+
+			</p:dataTable>
+		</h:form>
+
+		<!--  Caixa de Dialogo Cadastrar Partida -->
+		<p:dialog widgetVar="dlgPartidaCadastrar" closable="false" width="600px"
+			id="dlgPartidaCadastrar" height="500px" resizable="false"
+			appendTo="@(body)" modal="true" header="Partidas - Cadastrar">
+			<h:form id="frmNovaPartida">
+
+				<h:panelGrid id="pnlNovaPartida">
+
+					<h:outputText value="Data: *" style="font-size:10px" />
+					<p:inputText value="#{MBPartida.partida.data}" rendered="true"
+						style="font-size:10px" requiredMessage="Favor informar a Data">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
+
+					<h:outputText value="Local: " style="font-size:10px" />
+					<p:selectOneMenu id="locais" value="#{MBPartida.partida.local.id}"
+						filter="true" required="true" style="width:125px">
+						<f:selectItem itemLabel="Selecione o local"
+							noSelectionOption="true" />
+						<f:selectItems value="#{MBPartida.locais}" var="local"
+							itemLabel="#{local.local}" itemValue="#{local.id}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="Valor Ranking: " style="font-size:10px" />
+					<p:inputText value="#{MBPartida.partida.premiacaoRanking}"
+						style="font-size:10px" />
+
+					<p:dataTable value="#{MBPartida.partida.jogadores}" id="dtlListagemJogadores"
+						widgetVar="tabelaListagemJogadores" var="j"
+						style="width:500px; align:center"
+						sortBy="#{j.premiacao.colocacao.posicao}"
+						emptyMessage="Nenhum Registro foi encontrado" paginator="true"
+						rows="8">
+						<f:facet name="header">
+							<h:outputText value="Jogadores Participantes"
+								style="font-size:10px" />
+						</f:facet>
+
+						<p:column headerText="Jogador" width="10%"
+							style="font-size:10px;text-align:center">
+							<h:outputText value="#{j.nome}" style="font-size:10px" />
+						</p:column>
+
+						<p:column headerText="Entrada" width="8%"
+							style="font-size:10px;text-align:center">
+							<h:outputText value="#{j.despesa.entrada}" style="font-size:10px" />
+						</p:column>
+
+						<p:column headerText="Rebuy" width="8%"
+							style="font-size:10px;text-align:center">
+							<h:outputText value="#{j.despesa.rebuy}" style="font-size:10px" />
+						</p:column>
+
+						<p:column headerText="Add-On" width="8%"
+							style="font-size:10px;text-align:center">
+							<h:outputText value="#{j.despesa.add_on}" style="font-size:10px" />
+						</p:column>
+
+						<p:column headerText="Prem." width="8%"
+							style="font-size:10px;text-align:center">
+							<h:outputText value="#{j.premiacao.valor}" style="font-size:10px" />
+						</p:column>
+
+						<p:column headerText="Pos." width="6%"
+							style="font-size:10px;text-align:center">
+							<h:outputText value="#{j.premiacao.colocacao.posicao}"
+								style="font-size:10px" />
+						</p:column>
+
+						<p:column headerText="Opções" width="15%"
+							style="text-align:center">
+							<p:commandButton icon="ui-icon-pencil" title="Editar"
+								onclick="PF('dlgJogador').show();"
+								update="frmJogadorPartida:pnlJogadorPartida :msgGlobal">
+								<f:setPropertyActionListener value="#{j}"
+									target="#{MBPartida.jogador}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-trash" title="Excluir"
+								action="#{MBPartida.removerJogadorInserido}"
+								update="frmNovaPartida:pnlNovaPartida :msgGlobal">
+								<f:setPropertyActionListener value="#{j}"
+									target="#{MBPartida.jogador}" />
+							</p:commandButton>
+
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="4" cellpadding="10">
+
+					<p:commandButton value="Salvar" actionListener="#{MBPartida.execute}"
+						update="frmPartidas:dtPartidas :msgGlobal"
+						onclick="PF('dlgPartidaCadastrar').hide();">
+						<f:param name="param" value="CADASTRAR" />
+					</p:commandButton>
+
+					<p:commandButton value="Inserir Jogador"
+						update="frmJogadorPartida:pnlJogadorPartida :msgGlobal"
+						onclick="PF('dlgJogador').show();" />
+
+					<p:commandButton value="Cancel" actionListener="#{MBPartida.clear}"
+						update="frmJogadorPartida:pnlJogadorPartida :msgGlobal"
+						onclick="PF('dlgPartidaCadastrar').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+
+		<!-- Caixa de Dialogo para Inserir Jogador na PArtida -->
+		<p:dialog widgetVar="dlgJogador" closable="false" width="30%"
+			id="dlgNova" height="80%" resizable="false" appendTo="@(body)"
+			modal="true" header="Jogador - Cadastrar">
+			<h:form id="frmJogadorPartida">
+
+				<h:panelGrid id="pnlJogadorPartida">
+
+					<h:outputText value="Jogadores: *" style="font-size:10px" />
+					<p:selectOneMenu id="jogadores" value="#{MBPartida.jogador.id}"
+						filter="true" required="true" style="width:125px">
+						<f:selectItem itemLabel="Selecione o Jogador"
+							noSelectionOption="true" />
+						<f:selectItems value="#{MBPartida.jogadores}" var="jogador"
+							itemLabel="#{jogador.nome}" itemValue="#{jogador.id}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="Posição: *" style="font-size:10px" />
+					<p:selectOneMenu id="colocacoes"
+						value="#{MBPartida.jogador.premiacao.colocacao.id}"
+						required="true" style="width:125px">
+						<f:selectItem itemLabel="Selecione a Posição"
+							noSelectionOption="true" />
+						<f:selectItems value="#{MBPartida.colocacoes}" var="colocacao"
+							itemLabel="#{colocacao.posicao}" itemValue="#{colocacao.id}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="Valor Entrada: " style="font-size:10px" />
+					<p:inputText value="#{MBPartida.jogador.despesa.entrada}">
+					</p:inputText>
+
+					<h:outputText value="Valor Rebuy: " style="font-size:10px" />
+					<p:inputText value="#{MBPartida.jogador.despesa.rebuy}">
+					</p:inputText>
+
+					<h:outputText value="Valor Add-On: " style="font-size:10px" />
+					<p:inputText value="#{MBPartida.jogador.despesa.add_on}">
+					</p:inputText>
+
+					<h:outputText value="Premiação Recebida: " style="font-size:10px" />
+					<p:inputText value="#{MBPartida.jogador.premiacao.valor}">
+					</p:inputText>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar"
+						actionListener="#{MBPartida.inserirJogador}"
+						update="frmNovaPartida:pnlNovaPartida :msgGlobal"
+						onclick="PF('dlgJogador').hide();">
+						<f:param name="param" value="CADASTRAR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" actionListener="#{MBPartida.clear}"
+						onclick="PF('dlgJogador').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgEditarPartida" closable="false" width="30%"
+			id="dlgEditar" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Partidas - Editar">
+			<h:form id="frmEditarPartida">
+
+				<h:panelGrid id="pnlEditarPartida">
+
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="EDITAR"
+						actionListener="#{MBPartida.execute}"
+						update="frmPartidas:dtPartidas"
+						onclick="PF('dlgEditarPartida').hide();">
+						<f:param name="param" value="EDITAR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBPartida.clear}"
+						onclick="PF('dlgEditarPartida').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgExcluirPartida" closable="false" width="30%"
+			id="dlgExcluir" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Partidas - Excluir">
+			<h:form id="frmExcluirPartida">
+
+				<h:panelGrid id="pnlExcluirPartida">
+
+					<h:outputText value="Id: " style="font-size:10px" />
+					<p:inputText value="#{MBPartida.partida.id}" readonly="true"/>
+					
+					<h:outputText value="Local: " style="font-size:10px" />
+					<p:inputText value="#{MBPartida.partida.local.local}" readonly="true"/>
+					
+					<h:outputText value="Data: " style="font-size:10px" />
+					<p:inputText value="#{MBPartida.partida.data}" readonly="true"/>
+					
+					<h:outputText value="Participantes: " style="font-size:10px"/>
+					<p:inputText value="#{MBPartida.partida.participacao}" readonly="true"/>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Excluir" id="EXCLUIR"
+						actionListener="#{MBPartida.delete}"
+						update="frmPartidas:dtPartidas :msgGlobal"
+						onclick="PF('dlgExcluirPartida').hide();">
+						<f:param name="param" value="EXCLUIR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBPartida.clear}"
+						onclick="PF('dlgExcluirPartida').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+
+</ui:composition>

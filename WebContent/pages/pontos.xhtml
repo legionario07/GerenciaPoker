@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/layout.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmPontos">
+			<p:dataTable id="dtPontos" value="#{MBColocacao.colocacacoes}" widgetVar="tabelaListagem" var="ponto"
+				style="width:60%; align:center" sortBy="#{ponto.id}"
+				emptyMessage="Nenhum Registro foi encontrado" paginator="true"
+				rows="10">
+
+				<f:facet name="header">
+					<h:outputText value="Pontos" style="font-size:14px" />
+				</f:facet>
+
+
+				<p:column headerText="Id" width="5%"
+					style="font-size:11px; text-align:center" sortBy="#{ponto.id}">
+					<h:outputText value="#{ponto.id}" />
+				</p:column>
+
+				<p:column headerText="Posição" width="15%" style="font-size:11px"
+					sortBy="#{ponto.posicao}">
+					<h:outputText value="#{ponto.posicao}" />
+				</p:column>
+
+				<p:column headerText="Pontos" width="15%" style="font-size:11px"
+					sortBy="#{ponto.pontos}">
+					<h:outputText value="#{ponto.pontos}" />
+				</p:column>
+
+				<p:column headerText="Opções" width="10%" style="text-align:center">
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						onclick="PF('dlgEditarColocacao').show();"
+						update=":frmEditarColocacao:pnlEditarColocacao">
+						<f:setPropertyActionListener value="#{ponto}"
+							target="#{MBColocacao.colocacao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						onclick="PF('dlgExcluirColocacao').show();"
+						update="frmExcluirColocacao ">
+						<f:setPropertyActionListener value="#{ponto}"
+							target="#{MBColocacao.colocacao}" />
+					</p:commandButton>
+
+				</p:column>
+				<f:facet name="footer">
+					<h:panelGrid>
+						<p:commandButton value="Novo" onclick="PF('dlgColocacaoCadastrar').show();"
+							update=":frmNovaColocacao" />
+					</h:panelGrid>
+				</f:facet>
+
+			</p:dataTable>
+		</h:form>
+
+		<!--  Caixa de Dialogo Cadastrar Colocação -->
+		<p:dialog widgetVar="dlgColocacaoCadastrar" closable="false" width="30%"
+			id="dlgNova" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Pontos - Cadastrar">
+			<h:form id="frmNovaColocacao">
+
+				<h:panelGrid id="pnlNovaColocacao">
+
+					<h:outputText value="Posição: *" />
+					<p:inputText value="#{MBColocacao.colocacao.posicao}"
+						rendered="true" requiredMessage="Favor informar a posição" />
+
+					<h:outputText value="Pontos: *" />
+					<p:inputText value="#{MBColocacao.colocacao.pontos}"
+						rendered="true" requiredMessage="Favor informar a pontuação" />
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="CADASTRAR"
+						actionListener="#{MBColocacao.save}"
+						update="frmPontos:dtPontos"
+						onclick="PF('dlgColocacaoCadastrar').hide();">
+						<f:param name="param" value="CADASTRAR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBColocacao.clear}"
+						onclick="PF('dlgColocacaoCadastrar').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+		
+			<p:dialog widgetVar="dlgEditarColocacao" closable="false" width="30%"
+			id="dlgEditar" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Pontos - Editar">
+			<h:form id="frmEditarColocacao">
+
+				<h:panelGrid id="pnlEditarColocacao">
+
+					<h:outputText value="Posição: *" />
+					<p:inputText value="#{MBColocacao.colocacao.posicao}"
+						rendered="true" requiredMessage="Favor informar a posição" />
+
+					<h:outputText value="Pontos: *" />
+					<p:inputText value="#{MBColocacao.colocacao.pontos}"
+						rendered="true" requiredMessage="Favor informar a pontuação" />
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="EDITAR"
+						actionListener="#{MBColocacao.edite}"
+						update="frmPontos:dtPontos"
+						onclick="PF('dlgEditarColocacao').hide();">
+						<f:param name="param" value="EDITAR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBColocacao.clear}"
+						onclick="PF('dlgEditarColocacao').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+		
+			<p:dialog widgetVar="dlgExcluirColocacao" closable="false" width="30%"
+			id="dlgExcluir" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Pontos - Excluir">
+			<h:form id="frmExcluirColocacao">
+
+				<h:panelGrid id="pnlExcluirColocacao">
+
+					<h:outputText value="Posição: " />
+					<p:inputText value="#{MBColocacao.colocacao.posicao}" readonly="true"/>
+
+
+					<h:outputText value="Pontos: " />
+					<p:inputText value="#{MBColocacao.colocacao.pontos}" readonly="true" />
+
+
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="EXCLUIR"
+						actionListener="#{MBColocacao.delete}"
+						update="frmPontos:dtPontos"
+						onclick="PF('dlgExcluirColocacao').hide();">
+						<f:param name="param" value="EXCLUIR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBColocacao.clear}"
+						onclick="PF('dlgExcluirColocacao').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+
+</ui:composition>

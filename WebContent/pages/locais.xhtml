@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/layout.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmLocais">
+			<p:dataTable id="dtLocais" value="#{MBLocal.locais}" widgetVar="tabelaListagem" var="local"
+				style="width:60%; align:center" sortBy="#{local.id}"
+				emptyMessage="Nenhum Registro foi encontrado" paginator="true"
+				rows="10">
+
+				<f:facet name="header">
+					<h:outputText value="Locais" style="font-size:14px" />
+				</f:facet>
+
+
+				<p:column headerText="Id" width="5%"
+					style="font-size:11px; text-align:center" sortBy="#{local.id}">
+					<h:outputText value="#{local.id}" />
+				</p:column>
+
+				<p:column headerText="Nome" width="15%" style="font-size:11px"
+					sortBy="#{local.local}">
+					<h:outputText value="#{local.local}" />
+				</p:column>
+
+				<p:column headerText="Opções" width="10%" style="text-align:center">
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						onclick="PF('dlgEditarLocal').show();"
+						update=":frmEditarLocal:pnlEditarLocal">
+						<f:setPropertyActionListener value="#{local}"
+							target="#{MBLocal.local}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						onclick="PF('dlgExcluirLocal').show();"
+						update="frmExcluirLocal ">
+						<f:setPropertyActionListener value="#{local}"
+							target="#{MBLocal.local}" />
+					</p:commandButton>
+
+				</p:column>
+				<f:facet name="footer">
+					<h:panelGrid>
+						<p:commandButton value="Novo" onclick="PF('dlgLocalCadastrar').show();"
+							update=":frmNovaLocal" />
+					</h:panelGrid>
+				</f:facet>
+
+			</p:dataTable>
+		</h:form>
+
+		<!--  Caixa de Dialogo Cadastrar Local -->
+		<p:dialog widgetVar="dlgLocalCadastrar" closable="false" width="30%"
+			id="dlgNova" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Locais - Cadastrar">
+			<h:form id="frmNovaLocal">
+
+				<h:panelGrid id="pnlNovaLocal">
+
+					<h:outputText value="Nome: *" />
+					<p:inputText value="#{MBLocal.local.local}"
+						rendered="true" requiredMessage="Favor informar o local" />
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="CADASTRAR"
+						actionListener="#{MBLocal.save}"
+						update="frmLocais:dtLocais"
+						onclick="PF('dlgLocalCadastrar').hide();">
+						<f:param name="param" value="CADASTRAR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBLocal.clear}"
+						onclick="PF('dlgLocalCadastrar').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+		
+			<p:dialog widgetVar="dlgEditarLocal" closable="false" width="30%"
+			id="dlgEditar" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Locais - Editar">
+			<h:form id="frmEditarLocal">
+
+				<h:panelGrid id="pnlEditarLocal">
+
+					<h:outputText value="Nome: *" />
+					<p:inputText value="#{MBLocal.local.local}"
+						rendered="true" requiredMessage="Favor informar o local" />
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="EDITAR"
+						actionListener="#{MBLocal.edite}"
+						update="frmLocais:dtLocais"
+						onclick="PF('dlgEditarLocal').hide();">
+						<f:param name="param" value="EDITAR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBLocal.clear}"
+						onclick="PF('dlgEditarLocal').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+		
+			<p:dialog widgetVar="dlgExcluirLocal" closable="false" width="30%"
+			id="dlgExcluir" height="40%" resizable="false" appendTo="@(body)"
+			modal="true" header="Locais - Excluir">
+			<h:form id="frmExcluirLocal">
+
+				<h:panelGrid id="pnlExcluirLocal">
+
+					<h:outputText value="Nome: " />
+					<p:inputText value="#{MBLocal.local.local}" readonly="true"/>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlComandos" columns="2" cellpadding="10">
+
+					<p:commandButton value="Salvar" id="EXCLUIR"
+						actionListener="#{MBLocal.delete}"
+						update="frmLocais:dtLocais"
+						onclick="PF('dlgExcluirLocal').hide();">
+						<f:param name="param" value="EXCLUIR" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar" action="#{MBLocal.clear}"
+						onclick="PF('dlgExcluirLocal').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+
+</ui:composition>
