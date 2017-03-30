@@ -148,12 +148,13 @@ public class PartidaDao implements IDao {
 			if (rSet.next()) {
 				partida = new Partida();
 				partida.setId(rSet.getInt("id"));
+
 				partida.setData(rSet.getDate("data"));
-				
+
 				Local local = new Local(rSet.getInt("local"));
 				local = (Local) new LocalDao().find(local);
 				partida.setLocal(local);
-				
+
 				partida.setPremiacaoRanking(rSet.getBigDecimal("valor_ranking"));
 				partida.setParticipacao(rSet.getInt("participacao"));
 			}
@@ -185,11 +186,11 @@ public class PartidaDao implements IDao {
 				Partida partida = new Partida();
 				partida.setId(rSet.getInt("id"));
 				partida.setData(rSet.getDate("data"));
-				
+
 				Local local = new Local(rSet.getInt("local"));
 				local = (Local) new LocalDao().find(local);
 				partida.setLocal(local);
-				
+
 				partida.setPremiacaoRanking(rSet.getBigDecimal("valor_ranking"));
 				partida.setParticipacao(rSet.getInt("participacao"));
 

@@ -32,6 +32,8 @@ public class PartidaBean implements IBean {
 	private List<EntidadeDominio> colocacoes;
 	private List<EntidadeDominio> locais;
 	private Integer totalPartidas;
+	private String data;
+	
 
 	public PartidaBean() {
 		partida = new Partida();
@@ -116,6 +118,14 @@ public class PartidaBean implements IBean {
 		this.totalPartidas = totalPartidas;
 	}
 
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
 	public void findAll() {
 		partidas = new JogadorPartidaDao().findAll();
 		totalPartidas = partidas.size();
@@ -131,6 +141,8 @@ public class PartidaBean implements IBean {
 		} else {
 			edite();
 		}
+		
+		partida = new Partida();
 
 	}
 

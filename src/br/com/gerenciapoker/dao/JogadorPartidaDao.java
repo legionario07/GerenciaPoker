@@ -48,7 +48,7 @@ public class JogadorPartidaDao implements IDao {
 
 			ResultSet rs = pstm.getGeneratedKeys();
 			if (rs.next()) {
-				partida.setId(rs.getInt(1));
+				partida.getJogadores().get(0).getDespesa().setId(rs.getInt(1));
 			}
 			rs.close();
 			pstm.close();

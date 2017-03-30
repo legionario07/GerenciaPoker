@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/layout.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmEstatisticas">
+			<p:dataTable id="dtEstatisticas" value="#{MBEstatisticasBean.eps}"
+				widgetVar="tabelaListagem" var="ep"
+				style="width:60%; align:center" sortBy="#{ep.total}" sortOrder="DESCENDING"
+				emptyMessage="Nenhum Registro foi encontrado" paginator="true">
+
+				<f:facet name="header">
+					<h:outputText value="Estatisticas" style="font-size:14px" />
+				</f:facet>
+
+				<p:column headerText="Jogador" width="15%" 
+					style="font-size:11px" sortBy="#{ep.jogador.nome}">
+					<h:outputText value="#{ep.jogador.nome}" />
+				</p:column>
+				
+				<p:column headerText="Jogos" width="10%"
+					style="font-size:11px" sortBy="#{ep.jogos}">
+					<h:outputText value="#{ep.jogos}"/>
+				</p:column>
+				
+				<p:column headerText="Pontos Por Participacao" width="10%"
+					style="font-size:11px" sortBy="#{ep.participacao}">
+					<h:outputText value="#{ep.participacao}"/>
+				</p:column>
+				
+				<p:column headerText="Pontos Conquistados" width="10%"
+					style="font-size:11px" sortBy="#{ep.pontosConquistados}">
+					<h:outputText value="#{ep.pontosConquistados}"/>
+				</p:column>
+
+				<p:column headerText="Total" width="10%"
+					style="font-size:11px;background-color:#0000CD;color:white" sortBy="#{ep.total}">
+					<h:outputText value="#{ep.total}"/>
+				</p:column>
+				
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+
+
+</ui:composition>

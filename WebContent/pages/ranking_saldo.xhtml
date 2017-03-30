@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/layout.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmEstatisticas">
+			<p:dataTable id="dtEstatisticas" value="#{MBEstatisticasBean.ejs}"
+				widgetVar="tabelaListagem" var="ej"
+				style="width:80%; align:center" sortBy="#{ej.saldo}" sortOrder="DESCENDING"
+				emptyMessage="Nenhum Registro foi encontrado" paginator="true">
+
+				<f:facet name="header">
+					<h:outputText value="Estatisticas" style="font-size:14px" />
+				</f:facet>
+
+
+				<p:column headerText="Pos" width="5%"
+					style="font-size:11px; text-align:center" sortBy="#{ej.id}">
+					<h:outputText value="#{ej.id}" />
+				</p:column>
+				
+				<p:column headerText="Jogador" width="15%"
+					style="font-size:11px" sortBy="#{ej.jogador.nome}">
+					<h:outputText value="#{ej.jogador.nome}" />
+				</p:column>
+
+				<p:column headerText="Entradas" width="10%"
+					style="font-size:11px" sortBy="#{ej.entrada}">
+					<h:outputText value="#{ej.entrada}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="Premiação" width="10%"
+					style="font-size:11px" sortBy="#{ej.premiacao}">
+					<h:outputText value="#{ej.premiacao}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="Saldo" width="10%"
+					style="font-size:11px" sortBy="#{ej.saldo}">
+					<h:outputText value="#{ej.saldo}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+				</p:column>
+				
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+
+
+</ui:composition>
